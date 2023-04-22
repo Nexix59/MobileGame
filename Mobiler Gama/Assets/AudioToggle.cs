@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.UI;
 using TMPro;
 using System;
 
@@ -10,23 +11,22 @@ public class AudioToggle : MonoBehaviour
 
     public AudioMixer audioBruh;
     public AudioMixer audioDude;
+    private Component IsOn;
+    public Toggle audioToggle;
 
-
-    public void SeatVolume (float volume)
+    public void audioStuff(bool IsOn)
     {
+        if (IsOn == true)
+        {
 
-            audioBruh.SetFloat("AudioMane", volume = (0 * 1));
+            audioDude.SetFloat("AudioMane", 0);
 
-        //audioBruh.SetFloat("AudioMane"), (volume) * 1);
+        }
+        else
+        {
+            audioDude.SetFloat("AudioMane", -80);
+        }
     }
 
-    public void SestVolume (float volume)
-    {
-        audioDude.SetFloat("AudioMane", volume = (-80 * 1));
-    }
-
-    void Update()
-    {
-        
-    }
+                //audioBruh.SetFloat("AudioMane"), (volume) * 1);
 }
