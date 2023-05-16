@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Attack : MonoBehaviour
+public class MakeButton : MonoBehaviour
 {
     [SerializeField]
     private bool physical;
@@ -22,7 +22,6 @@ public class Attack : MonoBehaviour
         {
             hero.GetComponent<FighterAction>().SelectAttack("melee");
         } else if (btn.CompareTo("RangeBtn") == 0)
-
         {
             hero.GetComponent<FighterAction>().SelectAttack("range");
         } else

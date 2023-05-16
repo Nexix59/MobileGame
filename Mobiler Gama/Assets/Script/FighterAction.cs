@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class FighterAction : MonoBehaviour
 {
-    public GameObject enemy;
-    public GameObject hero;
+    private GameObject enemy;
+    private GameObject hero;
 
     [SerializeField]
     private GameObject meleePrefab;
@@ -18,8 +18,13 @@ public class FighterAction : MonoBehaviour
     private Sprite faceIcon;
 
     private GameObject currentAttack;
-    private GameObject meleeAttack;
-    private GameObject rangeAttack;
+
+    void Awake()
+    {
+        hero = GameObject.FindGameObjectWithTag("Hero");
+        enemy = GameObject.FindGameObjectWithTag("Enemy");
+    }
+
 
     public void SelectAttack(string btn)
     {
@@ -30,12 +35,12 @@ public class FighterAction : MonoBehaviour
         }
         if (btn.CompareTo("melee") == 0)
         {
-            meleeAttack.GetComponent<AttackScript>().Attack(victim);
+            meleePrefab.GetComponent<AttackScript>().Attack(victim);
 
         } else if (btn.CompareTo("range") ==  0)
         
         {
-            rangeAttack.GetComponent<AttackScript>().Attack(victim);
+            rangePrefab.GetComponent<AttackScript>().Attack(victim);
         } else
         {
             Debug.Log("Run");

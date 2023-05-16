@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using System;
 
-public class FighterStats : MonoBehaviour
+public class FighterStats : MonoBehaviour, IComparable
 {
     [SerializeField]
     private Animator animator;
@@ -40,7 +42,9 @@ public class FighterStats : MonoBehaviour
     private float xNewHealthScale;
     private float xNewMagicScale;
 
-    private void Start()
+    private GameObject GameControllerObj;
+
+    void Awake()
     {
         healthTransform = healthFill.GetComponent<RectTransform>();
         healthScale = healthFill.transform.localScale;
@@ -50,14 +54,17 @@ public class FighterStats : MonoBehaviour
 
         startHealth = health;
         startMagic = magic;
+
+        GameControllerObj = GameObject.Find("GameControllerObject");
     }
 
     public void ReceiveDamage(float damage)
     {
+        Debug.Log("Damage Recieved ! ! !");
         health = health - damage;
         //animator.Play("Damage");
 
-        // Sert dmg txt
+        // Set dmg txt
 
         if(health <= 0)
         {
@@ -66,17 +73,53 @@ public class FighterStats : MonoBehaviour
             Destroy(healthFill);
             Destroy(gameObject);
         }
-        else
+        else if (damage > 0)
         {
             xNewHealthScale = healthScale.x * (health / startHealth);
             healthFill.transform.localScale = new Vector2(xNewHealthScale, healthScale.y);
         }
+        if(damage > 0)
+        {
+            GameControllerObj.GetComponent<GameController>().battleText.gameObject.SetActive(true);
+            GameControllerObj.GetComponent<GameController>().battleText.text = damage.ToString();
+        }
+
+        Invoke("ContinueGame", 2);
     }
 
     public void updateMagicFill(float cost)
     {
+        if(cost > 0)
+        {
         magic = magic - cost;
         xNewMagicScale = magicScale.x * (magic / startMagic);
         magicFill.transform.localScale = new Vector2(xNewMagicScale, magicScale.y);
+        }
     }
+
+    public bool GetDead()
+    {
+        return dead;
+    }
+
+    void ContinueGame()
+    {
+        GameObject.Find("GameControllerObject").GetComponent<GameController>().NextTurn();
+    }
+
+    public void CalculateNextTurn(int currentTurn)
+    {
+        nextActTurn = currentTurn + Mathf.CeilToInt(100f / speed);
+    }
+
+    public int CompareTo(object otherStats)
+    {
+        Debug.Log("CompareTo Running");
+        int nex = nextActTurn.CompareTo(((FighterStats)otherStats).nextActTurn);
+        return nex;
+    }
+
+
+
+
 }
